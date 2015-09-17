@@ -10,6 +10,7 @@
 #include "FuncRec.h"
 #include "YmNetworks/BdnNode.h"
 #include "FuncMgr.h"
+#include "YmUtils/HashMap.h"
 
 
 BEGIN_NAMESPACE_YM
@@ -77,16 +78,16 @@ FuncRec::node_init(const BdnNode* node)
 
 BEGIN_NONAMESPACE
 
-typedef unordered_map<ymuint, TvFunc> IdFuncMap;
+typedef HashMap<ymuint, TvFunc> IdFuncMap;
 
 // cut_to_func の下請け関数
 TvFunc
 make_func(const BdnNode* node,
 	  IdFuncMap& f_map)
 {
-  IdFuncMap::const_iterator p = f_map.find(node->id());
-  if ( p != f_map.end() ) {
-    return p->second;
+  TvFunc func;
+  if ( f_map.find(node->id(), func) ) {
+    return func;
   }
 
   ASSERT_COND( node->type() == BdnNode::kLOGIC );
@@ -101,7 +102,6 @@ make_func(const BdnNode* node,
     func1 = ~func1;
   }
 
-  TvFunc func;
   if ( node->is_and() ) {
     func = func0 & func1;
   }
@@ -109,7 +109,7 @@ make_func(const BdnNode* node,
     func = func0 ^ func1;
   }
 
-  f_map.insert(make_pair(node->id(), func));
+  f_map.add(node->id(), func);
 
   return func;
 }
@@ -124,7 +124,7 @@ cut_to_func(const BdnNode* root,
   for (ymuint i = 0; i < ni; ++ i) {
     const BdnNode* node = inputs[i];
     TvFunc f = TvFunc::posi_literal(ni, VarId(i));
-    f_map.insert(make_pair(node->id(), f));
+    f_map.add(node->id(), f);
   }
   TvFunc f = make_func(root, f_map);
 

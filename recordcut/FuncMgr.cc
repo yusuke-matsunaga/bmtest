@@ -44,7 +44,7 @@ FuncMgr::reg_func(const TvFunc& f)
   NpnMap cmap;
   npn_mgr.cannonical(f, cmap);
   TvFunc rep = f.xform(cmap);
-  mRepHash.insert(rep);
+  mRepHash.add(rep);
 }
 
 // @brief マージする．
@@ -52,9 +52,9 @@ FuncMgr::reg_func(const TvFunc& f)
 void
 FuncMgr::merge(const FuncMgr& src)
 {
-  for (FuncSet::const_iterator p = src.mRepHash.begin();
+  for (HashSetIterator<TvFunc> p = src.mRepHash.begin();
        p != src.mRepHash.end(); ++ p) {
-    mRepHash.insert(*p);
+    mRepHash.add(p.key());
   }
 }
 
@@ -63,10 +63,10 @@ void
 FuncMgr::func_list(vector<TvFunc>& func_list) const
 {
   func_list.clear();
-  func_list.reserve(mRepHash.size());
-  for (FuncSet::const_iterator p = mRepHash.begin();
+  func_list.reserve(mRepHash.num());
+  for (HashSetIterator<TvFunc> p = mRepHash.begin();
        p != mRepHash.end(); ++ p) {
-    func_list.push_back(*p);
+    func_list.push_back(p.key());
   }
 }
 
@@ -77,18 +77,18 @@ FuncMgr::func_list(ymuint ni,
 {
   // 数を数える．
   ymuint n = 0;
-  for (FuncSet::const_iterator p = mRepHash.begin();
+  for (HashSetIterator<TvFunc> p = mRepHash.begin();
        p != mRepHash.end(); ++ p) {
-    const TvFunc& f = *p;
+    const TvFunc& f = p.key();
     if ( f.input_num() == ni ) {
       ++ n;
     }
   }
   func_list.clear();
   func_list.reserve(n);
-  for (FuncSet::const_iterator p = mRepHash.begin();
+  for (HashSetIterator<TvFunc> p = mRepHash.begin();
        p != mRepHash.end(); ++ p) {
-    const TvFunc& f = *p;
+    const TvFunc& f = p.key();
     if ( f.input_num() == ni ) {
       func_list.push_back(f);
     }
@@ -100,11 +100,11 @@ FuncMgr::func_list(ymuint ni,
 void
 FuncMgr::dump(ODO& s) const
 {
-  ymuint32 n = mRepHash.size();
+  ymuint32 n = mRepHash.num();
   s << n;
-  for (FuncSet::const_iterator p = mRepHash.begin();
+  for (HashSetIterator<TvFunc> p = mRepHash.begin();
        p != mRepHash.end(); ++ p) {
-    const TvFunc& f = *p;
+    const TvFunc& f = p.key();
     s << f;
   }
 }
@@ -120,7 +120,7 @@ FuncMgr::restore(IDO& s)
   for (ymuint i = 0; i < n; ++ i) {
     TvFunc f;
     s >> f;
-    mRepHash.insert(f);
+    mRepHash.add(f);
   }
 }
 

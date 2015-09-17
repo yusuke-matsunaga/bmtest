@@ -18,9 +18,6 @@
 #include "GbmSatCegarBinary.h"
 #include "GbmSatCegarEnum.h"
 #include "GbmSatCegarOneHot.h"
-#include "GbmBddCegarBinary.h"
-#include "GbmBddCegarEnum.h"
-#include "GbmBddCegarOneHot.h"
 
 
 BEGIN_NAMESPACE_YM
@@ -64,15 +61,6 @@ GbmSolver::new_solver(const string& method)
   }
   else if ( method == "sat_cegar_onehot" ) {
     solver = new GbmSatCegarOneHot();
-  }
-  else if ( method == "bdd_cegar_binary" ) {
-    solver = new GbmBddCegarBinary();
-  }
-  else if ( method == "bdd_cegar_enum" ) {
-    solver = new GbmBddCegarEnum();
-  }
-  else if ( method == "bdd_cegar_onehot" ) {
-    solver = new GbmBddCegarOneHot();
   }
   else if ( method == string() ) {
     // default fall-back

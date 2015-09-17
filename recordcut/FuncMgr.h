@@ -10,6 +10,7 @@
 
 
 #include "YmLogic/TvFunc.h"
+#include "YmUtils/HashSet.h"
 #include "YmUtils/IDO.h"
 #include "YmUtils/ODO.h"
 
@@ -80,7 +81,7 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  typedef unordered_set<TvFunc> FuncSet;
+  typedef HashSet<TvFunc> FuncSet;
 
   // 代表関数のハッシュ
   FuncSet mRepHash;

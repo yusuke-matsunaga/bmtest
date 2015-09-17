@@ -7,11 +7,7 @@
 /// All rights reserved.
 
 
-#if HAVE_POPT
 #include <popt.h>
-#else
-#error "<popt.h> not found."
-#endif
 
 #include "YmNetworks/BdnMgr.h"
 #include "YmNetworks/BdnBlifReader.h"
